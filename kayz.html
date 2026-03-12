@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayz AI Dashboard v4.1 (Patched)</title>
+    <title>Kayz AI Dashboard v4.2 Stable</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -18,11 +18,15 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 10px; }
-        .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: rgba(24, 24, 27, 0.8); border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(12px); }
+        
+        /* Layout */
+        .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: rgba(24, 24, 27, 0.95); border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; transition: transform 0.3s; backdrop-filter: blur(12px); }
         .main { margin-left: 260px; min-height: 100vh; transition: margin-left 0.3s; }
         @media (max-width: 768px) { .sidebar { transform: translateX(-100%); z-index: 1000; } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; } }
+
+        /* Components */
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; transition: all 0.3s; }
-        .card:hover { border-color: var(--border-hover); background: rgba(24,24,27,0.9); }
+        .card:hover { border-color: var(--border-hover); }
         .input-field { width: 100%; padding: 12px 16px; background: var(--bg-base); border: 1px solid var(--border); border-radius: 10px; color: var(--text-main); font-size: 14px; outline: none; transition: all 0.2s; }
         .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
         .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; border: none; transition: all 0.2s; }
@@ -33,6 +37,8 @@
         .nav-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; font-weight: 500; }
         .nav-link:hover { background: var(--bg-elevated); color: var(--text-main); }
         .nav-link.active { background: var(--accent-light); color: var(--accent); border-left-color: var(--accent); }
+        
+        /* Grid */
         .grid-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         @media (max-width: 640px) { .grid-media { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
         .media-card { position: relative; aspect-ratio: 1; background: var(--bg-elevated); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); }
@@ -41,17 +47,22 @@
         .media-card:hover img, .media-card:hover video { transform: scale(1.05); }
         .media-card .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 16px; }
         .media-card:hover .overlay { opacity: 1; }
+
+        /* Modal */
         .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-bg.active { opacity: 1; visibility: visible; }
         .modal-box { background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.3s; }
         .modal-bg.active .modal-box { transform: scale(1); }
+        
         .upload-zone { border: 1px dashed var(--border-hover); border-radius: 12px; padding: 16px; transition: all 0.3s; background: rgba(0,0,0,0.1); }
         .upload-zone:hover { border-color: var(--accent); background: var(--accent-light); }
+
         #toast-box { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 8px; }
         .toast { padding: 12px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); animation: slide 0.4s; display: flex; align-items: center; gap: 10px; }
         .toast svg { width: 16px; height: 16px; }
         .toast.err { border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; }
         .toast.ok { border-color: rgba(34, 197, 94, 0.3); color: #86efac; }
+        .toast.info { border-color: rgba(59, 130, 246, 0.3); color: #93c5fd; }
         @keyframes slide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
@@ -64,7 +75,7 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 Kayz AI
             </h1>
-            <span class="text-[10px] font-mono text-[var(--text-muted)] mt-1 block">PATCHED v4.1</span>
+            <span class="text-[10px] font-mono text-[var(--text-muted)] mt-1 block">STABLE v4.2</span>
         </div>
         <nav class="py-4 flex-1 overflow-y-auto">
             <div class="nav-link active" onclick="nav('dashboard')">Dashboard</div>
@@ -80,7 +91,8 @@
 
     <!-- Main -->
     <main class="main">
-        <header class="sticky top-0 z-50 bg-[var(--bg-base)]/70 backdrop-blur-xl border-b border-[var(--border)]">
+        <!-- Header -->
+        <header class="sticky top-0 z-50 bg-[var(--bg-base)]/80 backdrop-blur-xl border-b border-[var(--border)]">
             <div class="flex items-center justify-between p-4 lg:px-6">
                 <div class="flex items-center gap-4">
                     <button class="lg:hidden btn btn-sec p-2" onclick="document.getElementById('sidebar').classList.toggle('open')">
@@ -125,11 +137,11 @@
         <!-- Telegram -->
         <section id="sec-telegram" class="p-6 hidden">
             <div class="max-w-2xl mx-auto space-y-6">
-                <div class="card p-4 bg-blue-500/5 border-blue-500/20 text-blue-200 text-sm">
-                    <strong>Tips Error "Bad Request":</strong><br>
-                    1. Pastikan sudah klik <b>START</b> di bot Anda.<br>
-                    2. Gunakan Chat ID numerik (contoh: 53223123).<br>
-                    3. Pastikan koneksi internet stabil.
+                <div class="card p-4 bg-blue-500/10 border-blue-500/20 text-blue-200 text-sm">
+                    <strong>Cara Penggunaan:</strong><br>
+                    1. Isi Token & Chat ID.<br>
+                    2. Klik "Test Koneksi" untuk cek.<br>
+                    3. Klik "Backup Data". Jika kirim file gagal, sistem otomatis mengunduh file JSON yang bisa Anda drag manual ke Telegram.
                 </div>
                 
                 <div class="card p-6">
@@ -138,15 +150,11 @@
                         <div><label class="text-xs text-[var(--text-muted)] font-medium">Bot Token</label><input type="text" id="tg-token" class="input-field mt-1" placeholder="Dari @BotFather"></div>
                         <div><label class="text-xs text-[var(--text-muted)] font-medium">Chat ID</label><input type="text" id="tg-cid" class="input-field mt-1" placeholder="Dari @userinfobot"></div>
                         <div class="flex gap-2">
-                            <button class="btn btn-sec flex-1" onclick="tgCheck()">Cek Validitas</button>
-                            <button class="btn btn-pri flex-1" onclick="tgTest()">Test Kirim</button>
+                            <button class="btn btn-sec flex-1" onclick="tgTest()">Test Koneksi</button>
+                            <button class="btn btn-pri flex-1" onclick="tgBackup()">Backup Data</button>
                         </div>
-                        <div id="tg-log" class="hidden text-xs font-mono bg-[var(--bg-base)] p-3 rounded border border-[var(--border)] max-h-40 overflow-auto"></div>
+                        <div id="tg-log" class="hidden text-xs font-mono bg-[var(--bg-base)] p-3 rounded border border-[var(--border)] max-h-40 overflow-auto whitespace-pre-wrap"></div>
                     </div>
-                </div>
-                <div class="flex gap-2">
-                    <button class="btn btn-sec w-full" onclick="tgSave()">Simpan Config</button>
-                    <button class="btn btn-pri w-full" onclick="tgBackup()">Backup Data (File)</button>
                 </div>
             </div>
         </section>
@@ -242,12 +250,25 @@ let editId = null;
 let tempFile = { type: '', data: '' };
 
 // INIT
-function init() { let d = localStorage.getItem('kayz_v41'); if(d) s = JSON.parse(d); render(); loadCfg(); }
+function init() { 
+    let d = localStorage.getItem('kayz_v42'); 
+    if(d) {
+        try { s = JSON.parse(d); } catch(e) { console.error("Data Corrupted", e); }
+    }
+    render(); 
+    loadCfg(); 
+}
+
 function save() { 
     try {
-        localStorage.setItem('kayz_v41', JSON.stringify(s)); 
+        const dataStr = JSON.stringify(s);
+        // Check size (approx 5MB limit for localStorage)
+        if (dataStr.length > 4.5 * 1024 * 1024) { // 4.5MB safe limit
+            toast('Memori hampir penuh! Export data segera.', 'err');
+        }
+        localStorage.setItem('kayz_v42', dataStr); 
     } catch (e) {
-        toast('Memori Penuh! Data terlalu besar.', 'err');
+        toast('Gagal menyimpan! Memori Penuh.', 'err');
         console.error(e);
     }
 }
@@ -355,6 +376,12 @@ function openMedModal(id=null) {
 function handleFile(e, type) {
     const file = e.target.files[0];
     if(!file) return;
+    
+    // Check file size (warn if > 2MB as base64 will be 33% larger)
+    if(file.size > 2 * 1024 * 1024) {
+        toast('File besar (>2MB). Mungkin gagal disimpan.', 'info');
+    }
+
     const reader = new FileReader();
     reader.onload = function(ev) {
         tempFile = { type: type, data: ev.target.result };
@@ -402,82 +429,82 @@ function saveMed() {
 function delMed(id) { if(!confirm('Hapus?')) return; s.med = s.med.filter(i=>i.id!==id); save(); render(); toast('Dihapus', 'ok'); }
 function editMed(id) { openMedModal(id); }
 
-// TELEGRAM CORE (PATCHED)
+// TELEGRAM CORE (STABLE)
 const tgLog = document.getElementById('tg-log');
-const proxy = 'https://corsproxy.io/?'; // Public CORS Proxy to bypass browser restrictions
-
-async function tgCheck() {
-    const t = document.getElementById('tg-token').value;
-    if(!t) return toast('Token kosong', 'err');
-    tgLog.classList.remove('hidden'); tgLog.innerText = 'Checking via proxy...';
-    try {
-        const r = await fetch(proxy + encodeURIComponent(`https://api.telegram.org/bot${t}/getMe`));
-        const d = await r.json();
-        tgLog.innerText = JSON.stringify(d, null, 2);
-        if(d.ok) toast('Bot Valid: ' + d.result.username, 'ok');
-        else toast('Token Invalid', 'err');
-    } catch(e) { tgLog.innerText = 'Error: ' + e.message; toast('Koneksi Gagal', 'err'); }
-}
+const proxy = 'https://corsproxy.io/?';
 
 async function tgTest() {
     const t = document.getElementById('tg-token').value;
     const c = document.getElementById('tg-cid').value;
     if(!t || !c) return toast('Token/ID kosong', 'err');
-    tgLog.classList.remove('hidden'); tgLog.innerText = 'Sending via proxy...';
+    tgLog.classList.remove('hidden'); tgLog.innerText = 'Menghubungi Telegram...';
+    
     try {
-        // Using proxy for sendMessage
-        const url = proxy + encodeURIComponent(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${c}&text=Kayz AI Connected`);
-        const r = await fetch(url);
+        // Using GET method for simple message via proxy
+        const url = `https://api.telegram.org/bot${t}/sendMessage?chat_id=${c}&text=Kayz AI Connected!`;
+        const r = await fetch(proxy + encodeURIComponent(url));
         const d = await r.json();
         tgLog.innerText = JSON.stringify(d, null, 2);
-        if(d.ok) toast('Pesan terkirim', 'ok');
+        if(d.ok) toast('Koneksi Sukses!', 'ok');
         else toast('Error: ' + d.description, 'err');
-    } catch(e) { tgLog.innerText = 'Error: ' + e.message; }
+    } catch(e) { 
+        tgLog.innerText = 'Error: ' + e.message; 
+        toast('Gagal koneksi (Proxy Error)', 'err'); 
+    }
 }
 
 async function tgBackup() {
-    if(!s.bot.t || !s.bot.c) return toast('Config belum disimpan', 'err');
+    if(!s.bot.t || !s.bot.c) {
+         // Use current form values if not saved yet
+         s.bot.t = document.getElementById('tg-token').value;
+         s.bot.c = document.getElementById('tg-cid').value;
+    } 
     
-    // Check size first
+    toast('Memproses backup...', 'info');
+    
     const blob = new Blob([JSON.stringify(s, null, 2)], {type: 'application/json'});
     const sizeMB = blob.size / (1024*1024);
     
-    if (sizeMB > 49) {
-         toast(`Data terlalu besar (${sizeMB.toFixed(2)} MB). Maks 50MB.`, 'err');
-         return;
+    // Fallback Strategy: If size > 10MB, just download.
+    if (sizeMB > 10) {
+        toast(`Data besar (${sizeMB.toFixed(1)}MB). Mengunduh file...`, 'info');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'kayz_backup_manual.json';
+        a.click();
+        toast('Silakan kirim file manual ke Bot.', 'info');
+        return;
     }
 
-    toast('Processing backup...', 'ok');
-    
     const fd = new FormData();
     fd.append('document', blob, 'kayz_backup.json');
     fd.append('chat_id', s.bot.c);
-    fd.append('caption', 'Kayz AI Backup Data');
 
     try {
-        // Note: Sending FormData via CORS proxy can sometimes strip headers, 
-        // but most modern proxies like corsproxy.io handle it.
+        // Try sending via Proxy
         const r = await fetch(proxy + encodeURIComponent(`https://api.telegram.org/bot${s.bot.t}/sendDocument`), {
             method: 'POST',
             body: fd
         });
         const d = await r.json();
-        if(d.ok) toast('Backup sukses!', 'ok');
-        else {
-            toast('Backup gagal: ' + d.description, 'err');
-            console.error(d);
+        
+        if(d.ok) {
+            toast('Backup sukses terkirim!', 'ok');
+            tgLog.innerText = "Backup sent successfully.";
+        } else {
+            throw new Error(d.description || "Unknown Telegram Error");
         }
-    } catch(e) { 
-        toast('Error jaringan/proxy', 'err'); 
+    } catch(e) {
+        // If proxy fails, fallback to download
         console.error(e);
+        toast('Proxy gagal. Mengunduh file manual...', 'err');
+        tgLog.innerText = "Gagal kirim otomatis. Silakan kirim manual.";
+        
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'kayz_backup_manual.json';
+        a.click();
     }
-}
-
-function tgSave() { 
-    s.bot.t = document.getElementById('tg-token').value; 
-    s.bot.c = document.getElementById('tg-cid').value; 
-    save(); 
-    toast('Config disimpan', 'ok'); 
 }
 
 // SETTINGS
@@ -496,12 +523,25 @@ function saveSettings() {
     s.cfg.nsfw = document.getElementById('st-nsfw').checked;
     save(); toast('Settings disimpan', 'ok');
 }
-function expJSON() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(s, null, 2)])); a.download='kayz_data.json'; a.click(); }
+function expJSON() { 
+    const dataStr = JSON.stringify(s, null, 2);
+    const a=document.createElement('a'); 
+    a.href=URL.createObjectURL(new Blob([dataStr])); 
+    a.download='kayz_data.json'; 
+    a.click(); 
+}
 function impJSON(e) {
     const file = e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => { try { s = JSON.parse(ev.target.result); save(); init(); toast('Import sukses', 'ok'); } catch(e) { toast('File rusak', 'err'); } };
+    reader.onload = (ev) => { 
+        try { 
+            s = JSON.parse(ev.target.result); 
+            save(); 
+            init(); 
+            toast('Import sukses', 'ok'); 
+        } catch(e) { toast('File rusak', 'err'); } 
+    };
     reader.readAsText(file);
 }
 
@@ -520,7 +560,7 @@ function exportGallery() {
     <style>
         :root { --accent: ${s.cfg.accent}; --bg: ${s.cfg.bg}; }
         body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', system-ui; }
-        body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+        body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .item { position: relative; border-radius: 20px; overflow: hidden; cursor: pointer; background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2)); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.05); }
         .item:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
@@ -574,10 +614,11 @@ function toast(msg, type='ok') {
     const c = document.getElementById('toast-box');
     const d = document.createElement('div');
     const icon = type === 'ok' ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+    const iconInfo = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
     d.className = 'toast ' + type;
-    d.innerHTML = icon + '<span>' + msg + '</span>';
+    d.innerHTML = (type === 'info' ? iconInfo : icon) + '<span>' + msg + '</span>';
     c.appendChild(d);
-    setTimeout(() => d.remove(), 3000);
+    setTimeout(() => d.remove(), 4000);
 }
 
 init();
