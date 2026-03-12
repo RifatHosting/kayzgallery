@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayz AI Dashboard v4.1</title>
+    <title>Kayz AI Dashboard v4.1 (Patched)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,61 +15,40 @@
         }
         body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text-main); overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
-
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 10px; }
-
-        /* Layout */
         .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 260px; background: rgba(24, 24, 27, 0.8); border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(12px); }
         .main { margin-left: 260px; min-height: 100vh; transition: margin-left 0.3s; }
-        
-        @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); z-index: 1000; }
-            .sidebar.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
-            .main { margin-left: 0; }
-        }
-
-        /* Components */
+        @media (max-width: 768px) { .sidebar { transform: translateX(-100%); z-index: 1000; } .sidebar.open { transform: translateX(0); } .main { margin-left: 0; } }
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; transition: all 0.3s; }
         .card:hover { border-color: var(--border-hover); background: rgba(24,24,27,0.9); }
-        
         .input-field { width: 100%; padding: 12px 16px; background: var(--bg-base); border: 1px solid var(--border); border-radius: 10px; color: var(--text-main); font-size: 14px; outline: none; transition: all 0.2s; }
         .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
-        
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; border: none; transition: all 0.2s; letter-spacing: -0.01em; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; border: none; transition: all 0.2s; }
         .btn-pri { background: var(--accent); color: white; box-shadow: 0 2px 10px rgba(249,115,22,0.2); }
         .btn-pri:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(249,115,22,0.3); }
         .btn-sec { background: var(--bg-elevated); color: var(--text-main); border: 1px solid var(--border); }
-        .btn-sec:hover { background: var(--border-hover); border-color: var(--border-hover); }
-        
+        .btn-sec:hover { background: var(--border-hover); }
         .nav-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; font-weight: 500; }
         .nav-link:hover { background: var(--bg-elevated); color: var(--text-main); }
         .nav-link.active { background: var(--accent-light); color: var(--accent); border-left-color: var(--accent); }
-
-        /* Grid System */
         .grid-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         @media (max-width: 640px) { .grid-media { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
-        
         .media-card { position: relative; aspect-ratio: 1; background: var(--bg-elevated); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); }
-        .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .media-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .media-card:hover img, .media-card:hover video { transform: scale(1.05); }
         .media-card .overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 16px; }
         .media-card:hover .overlay { opacity: 1; }
-
-        /* Modal */
         .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-bg.active { opacity: 1; visibility: visible; }
-        .modal-box { background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .modal-box { background: var(--bg-card); border: 1px solid var(--border-hover); border-radius: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.3s; }
         .modal-bg.active .modal-box { transform: scale(1); }
-
-        /* Upload Section Styling */
         .upload-zone { border: 1px dashed var(--border-hover); border-radius: 12px; padding: 16px; transition: all 0.3s; background: rgba(0,0,0,0.1); }
         .upload-zone:hover { border-color: var(--accent); background: var(--accent-light); }
-
         #toast-box { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 8px; }
-        .toast { padding: 12px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); animation: slide 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
+        .toast { padding: 12px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); animation: slide 0.4s; display: flex; align-items: center; gap: 10px; }
         .toast svg { width: 16px; height: 16px; }
         .toast.err { border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; }
         .toast.ok { border-color: rgba(34, 197, 94, 0.3); color: #86efac; }
@@ -85,50 +64,29 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 Kayz AI
             </h1>
-            <span class="text-[10px] font-mono text-[var(--text-muted)] mt-1 block">SYSTEM v4.1</span>
+            <span class="text-[10px] font-mono text-[var(--text-muted)] mt-1 block">PATCHED v4.1</span>
         </div>
         <nav class="py-4 flex-1 overflow-y-auto">
-            <div class="nav-link active" onclick="nav('dashboard')">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-                Dashboard
-            </div>
-            <div class="nav-link" onclick="nav('categories')">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                Categories
-            </div>
-            <div class="nav-link" onclick="nav('media')">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                Media
-            </div>
-            <div class="nav-link" onclick="nav('telegram')">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                Telegram Bot
-            </div>
-            <div class="nav-link" onclick="nav('settings')">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m-7.78-5.22l2.83-2.83m8.9-8.9l2.83-2.83M1 12h4m14 0h4"/></svg>
-                Settings
-            </div>
+            <div class="nav-link active" onclick="nav('dashboard')">Dashboard</div>
+            <div class="nav-link" onclick="nav('categories')">Categories</div>
+            <div class="nav-link" onclick="nav('media')">Media</div>
+            <div class="nav-link" onclick="nav('telegram')">Telegram Bot</div>
+            <div class="nav-link" onclick="nav('settings')">Settings</div>
         </nav>
         <div class="p-4 border-t border-[var(--border)]">
-            <button class="btn btn-pri w-full text-sm shadow-lg" onclick="exportGallery()">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                Export Gallery
-            </button>
+            <button class="btn btn-pri w-full text-sm shadow-lg" onclick="exportGallery()">Export Gallery</button>
         </div>
     </aside>
 
     <!-- Main -->
     <main class="main">
-        <!-- Header -->
         <header class="sticky top-0 z-50 bg-[var(--bg-base)]/70 backdrop-blur-xl border-b border-[var(--border)]">
             <div class="flex items-center justify-between p-4 lg:px-6">
                 <div class="flex items-center gap-4">
                     <button class="lg:hidden btn btn-sec p-2" onclick="document.getElementById('sidebar').classList.toggle('open')">
                         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
-                    <div>
-                        <h2 class="font-bold text-base text-[var(--text-main)]" id="title">Dashboard</h2>
-                    </div>
+                    <h2 class="font-bold text-base" id="title">Dashboard</h2>
                 </div>
             </div>
         </header>
@@ -136,10 +94,10 @@
         <!-- Dashboard -->
         <section id="sec-dashboard" class="p-6 space-y-6">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="card p-6 hover:scale-[1.02] transition-transform"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase tracking-wider font-semibold">Total Media</div><div class="text-3xl font-bold text-[var(--accent)]" id="stat-m">0</div></div>
-                <div class="card p-6 hover:scale-[1.02] transition-transform"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase tracking-wider font-semibold">Categories</div><div class="text-3xl font-bold" id="stat-c">0</div></div>
-                <div class="card p-6 hover:scale-[1.02] transition-transform"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase tracking-wider font-semibold">NSFW</div><div class="text-3xl font-bold text-red-400" id="stat-n">0</div></div>
-                <div class="card p-6 hover:scale-[1.02] transition-transform"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase tracking-wider font-semibold">Bot Status</div><div class="text-3xl font-bold text-green-400" id="stat-b">Idle</div></div>
+                <div class="card p-6"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase">Total Media</div><div class="text-3xl font-bold text-[var(--accent)]" id="stat-m">0</div></div>
+                <div class="card p-6"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase">Categories</div><div class="text-3xl font-bold" id="stat-c">0</div></div>
+                <div class="card p-6"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase">NSFW</div><div class="text-3xl font-bold text-red-400" id="stat-n">0</div></div>
+                <div class="card p-6"><div class="text-xs text-[var(--text-muted)] mb-1 uppercase">Bot Status</div><div class="text-3xl font-bold text-green-400" id="stat-b">Idle</div></div>
             </div>
         </section>
 
@@ -157,8 +115,8 @@
             <div class="flex flex-col sm:flex-row justify-between mb-6 items-start gap-4">
                 <h3 class="font-bold text-lg">Koleksi Media</h3>
                 <div class="flex gap-2">
-                    <select id="filter-cat" class="input-field w-auto text-sm" onchange="renderMedia()"><option value="">Semua Kategori</option></select>
-                    <button class="btn btn-pri" onclick="openMedModal()">+ Upload Media</button>
+                    <select id="filter-cat" class="input-field w-auto text-sm" onchange="renderMedia()"><option value="">Semua</option></select>
+                    <button class="btn btn-pri" onclick="openMedModal()">+ Upload</button>
                 </div>
             </div>
             <div id="med-list" class="grid-media"></div>
@@ -167,6 +125,13 @@
         <!-- Telegram -->
         <section id="sec-telegram" class="p-6 hidden">
             <div class="max-w-2xl mx-auto space-y-6">
+                <div class="card p-4 bg-blue-500/5 border-blue-500/20 text-blue-200 text-sm">
+                    <strong>Tips Error "Bad Request":</strong><br>
+                    1. Pastikan sudah klik <b>START</b> di bot Anda.<br>
+                    2. Gunakan Chat ID numerik (contoh: 53223123).<br>
+                    3. Pastikan koneksi internet stabil.
+                </div>
+                
                 <div class="card p-6">
                     <h3 class="font-bold text-lg mb-4">Integrasi Telegram</h3>
                     <div class="space-y-4">
@@ -181,7 +146,7 @@
                 </div>
                 <div class="flex gap-2">
                     <button class="btn btn-sec w-full" onclick="tgSave()">Simpan Config</button>
-                    <button class="btn btn-pri w-full" onclick="tgBackup()">Backup Data</button>
+                    <button class="btn btn-pri w-full" onclick="tgBackup()">Backup Data (File)</button>
                 </div>
             </div>
         </section>
@@ -198,7 +163,7 @@
                             <div class="flex-1"><label class="text-xs text-[var(--text-muted)] font-medium">Warna Background</label><input type="color" id="st-bg" class="input-field mt-1 h-12 p-1"></div>
                         </div>
                         <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="st-nsfw" class="accent-[var(--accent)] w-4 h-4"> Tampilkan NSFW (Blur)</label>
-                        <button class="btn btn-pri w-full mt-2" onclick="saveSettings()">Simpan Pengaturan</button>
+                        <button class="btn btn-pri w-full mt-2" onclick="saveSettings()">Simpan</button>
                     </div>
                 </div>
                 <div class="card p-6 flex gap-2">
@@ -208,73 +173,57 @@
                 </div>
             </div>
         </section>
-        
         <footer class="text-center py-8 text-xs text-[var(--text-muted)] border-t border-[var(--border)] mt-8">Powered by Kayz AI Open Source</footer>
     </main>
 
     <!-- Modals -->
-    <!-- Category Modal -->
     <div id="m-cat" class="modal-bg">
-        <div class="modal-box"><div class="p-5 border-b border-[var(--border)]"><h3 class="font-bold" id="m-cat-title">Kategori</h3></div>
+        <div class="modal-box"><div class="p-5 border-b border-[var(--border)]"><h3 class="font-bold">Kategori</h3></div>
             <div class="p-5 space-y-4">
-                <div><label class="text-xs text-[var(--text-muted)] font-medium">Nama</label><input type="text" id="i-cat-n" class="input-field mt-1" placeholder="Contoh: Nepeswe Yuuka"></div>
+                <div><label class="text-xs text-[var(--text-muted)] font-medium">Nama</label><input type="text" id="i-cat-n" class="input-field mt-1"></div>
                 <div><label class="text-xs text-[var(--text-muted)] font-medium">Tipe</label><select id="i-cat-t" class="input-field mt-1"><option value="normal">Normal</option><option value="nsfw">NSFW</option></select></div>
                 <div class="flex gap-3 pt-2"><button class="btn btn-sec w-full" onclick="closeModal('m-cat')">Batal</button><button class="btn btn-pri w-full" onclick="saveCat()">Simpan</button></div>
             </div>
         </div>
     </div>
 
-    <!-- Media Modal (New Layout) -->
     <div id="m-med" class="modal-bg">
-        <div class="modal-box"><div class="p-5 border-b border-[var(--border)]"><h3 class="font-bold">Upload Media Baru</h3></div>
+        <div class="modal-box"><div class="p-5 border-b border-[var(--border)]"><h3 class="font-bold">Upload Media</h3></div>
             <div class="p-5 space-y-5">
-                <!-- Step 1: Category -->
-                <div class="bg-[var(--accent-light)] text-[var(--accent)] text-xs p-3 rounded-lg border border-[var(--accent)]/20">
-                    Langkah 1: Pilih Kategori terlebih dahulu.
-                </div>
-                <div>
-                    <label class="text-xs text-[var(--text-muted)] font-medium">Kategori</label>
-                    <select id="i-med-c" class="input-field mt-1"></select>
-                </div>
+                <div class="bg-[var(--accent-light)] text-[var(--accent)] text-xs p-3 rounded-lg">Pilih kategori terlebih dahulu.</div>
+                <div><label class="text-xs text-[var(--text-muted)] font-medium">Kategori</label><select id="i-med-c" class="input-field mt-1"></select></div>
 
-                <!-- Step 2: Photo Section -->
                 <div class="space-y-2">
-                    <label class="text-xs font-bold text-white/40 tracking-wider">PHOTO MEDIA</label>
+                    <label class="text-xs font-bold text-white/40">PHOTO MEDIA</label>
                     <div class="upload-zone space-y-2">
-                        <input type="text" id="i-url-p" class="input-field" placeholder="Tempel Link Gambar Disini...">
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 h-px bg-[var(--border)]"></div><span class="text-[10px] text-[var(--text-muted)]">ATAU</span><div class="flex-1 h-px bg-[var(--border)]"></div>
-                        </div>
-                        <label class="btn btn-sec w-full cursor-pointer border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--accent)]">
+                        <input type="text" id="i-url-p" class="input-field" placeholder="Link Gambar...">
+                        <div class="flex items-center gap-2"><div class="flex-1 h-px bg-[var(--border)]"></div><span class="text-[10px] text-[var(--text-muted)]">ATAU</span><div class="flex-1 h-px bg-[var(--border)]"></div></div>
+                        <label class="btn btn-sec w-full cursor-pointer hover:border-[var(--accent)]">
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-                            Upload Foto dari Device
+                            Upload Foto
                             <input type="file" id="i-file-p" class="hidden" accept="image/*" onchange="handleFile(event, 'image')">
                         </label>
-                        <div id="prev-p" class="hidden text-xs text-center text-[var(--accent)]">File foto siap diupload</div>
+                        <div id="prev-p" class="hidden text-xs text-center text-[var(--accent)]">File siap</div>
                     </div>
                 </div>
 
-                <!-- Step 3: Video Section -->
                 <div class="space-y-2">
-                    <label class="text-xs font-bold text-white/40 tracking-wider">VIDEO MEDIA</label>
+                    <label class="text-xs font-bold text-white/40">VIDEO MEDIA</label>
                     <div class="upload-zone space-y-2">
-                        <input type="text" id="i-url-v" class="input-field" placeholder="Tempel Link Video Disini...">
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 h-px bg-[var(--border)]"></div><span class="text-[10px] text-[var(--text-muted)]">ATAU</span><div class="flex-1 h-px bg-[var(--border)]"></div>
-                        </div>
-                        <label class="btn btn-sec w-full cursor-pointer border-[var(--border)] hover:border-[var(--accent)] hover:text-[var(--accent)]">
+                        <input type="text" id="i-url-v" class="input-field" placeholder="Link Video...">
+                        <div class="flex items-center gap-2"><div class="flex-1 h-px bg-[var(--border)]"></div><span class="text-[10px] text-[var(--text-muted)]">ATAU</span><div class="flex-1 h-px bg-[var(--border)]"></div></div>
+                        <label class="btn btn-sec w-full cursor-pointer hover:border-[var(--accent)]">
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-                            Upload Video dari Device
+                            Upload Video
                             <input type="file" id="i-file-v" class="hidden" accept="video/*" onchange="handleFile(event, 'video')">
                         </label>
-                        <div id="prev-v" class="hidden text-xs text-center text-[var(--accent)]">File video siap diupload</div>
+                        <div id="prev-v" class="hidden text-xs text-center text-[var(--accent)]">File siap</div>
                     </div>
                 </div>
 
-                <!-- Step 4: Details -->
                 <div class="space-y-3 pt-2 border-t border-[var(--border)]">
-                    <div><label class="text-xs text-[var(--text-muted)] font-medium">Judul Media</label><input type="text" id="i-med-ti" class="input-field mt-1" placeholder="Judul konten"></div>
-                    <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="i-med-ns" class="accent-[var(--accent)] w-4 h-4"> Konten NSFW</label>
+                    <div><label class="text-xs text-[var(--text-muted)] font-medium">Judul</label><input type="text" id="i-med-ti" class="input-field mt-1"></div>
+                    <label class="flex items-center gap-2 text-sm cursor-pointer"><input type="checkbox" id="i-med-ns" class="accent-[var(--accent)] w-4 h-4"> NSFW</label>
                 </div>
 
                 <div class="flex gap-3 pt-2">
@@ -290,13 +239,20 @@
 <script>
 let s = { cat: [], med: [], cfg: { title: 'Kayz AI Gallery', accent: '#f97316', bg: '#09090b', nsfw: true }, bot: { t: '', c: '' } };
 let editId = null;
-let tempFile = { type: '', data: '' }; // Temporary storage for uploaded files
+let tempFile = { type: '', data: '' };
 
-// Init
+// INIT
 function init() { let d = localStorage.getItem('kayz_v41'); if(d) s = JSON.parse(d); render(); loadCfg(); }
-function save() { localStorage.setItem('kayz_v41', JSON.stringify(s)); }
+function save() { 
+    try {
+        localStorage.setItem('kayz_v41', JSON.stringify(s)); 
+    } catch (e) {
+        toast('Memori Penuh! Data terlalu besar.', 'err');
+        console.error(e);
+    }
+}
 
-// Nav
+// NAV
 function nav(id) {
     ['dashboard', 'categories', 'media', 'telegram', 'settings'].forEach(i => {
         document.getElementById('sec-'+i).classList.add('hidden');
@@ -308,7 +264,7 @@ function nav(id) {
     document.getElementById('sidebar').classList.remove('open');
 }
 
-// Render
+// RENDER
 function render() {
     document.getElementById('stat-m').innerText = s.med.length;
     document.getElementById('stat-c').innerText = s.cat.length;
@@ -318,21 +274,18 @@ function render() {
     const sel = document.getElementById('i-med-c');
     const fil = document.getElementById('filter-cat');
     
-    sel.innerHTML = `<option value="">-- Pilih Kategori --</option>` + s.cat.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    sel.innerHTML = `<option value="">-- Pilih --</option>` + s.cat.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
     fil.innerHTML = `<option value="">Semua</option>` + s.cat.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
 
-    cl.innerHTML = s.cat.length === 0 ? '<div class="card p-8 text-center text-[var(--text-muted)] text-sm">Belum ada kategori. Buat kategori pertama Anda.</div>' : s.cat.map(c=>`
+    cl.innerHTML = s.cat.length === 0 ? '<div class="card p-8 text-center text-[var(--text-muted)]">Belum ada kategori.</div>' : s.cat.map(c=>`
         <div class="card p-4 flex justify-between items-center group hover:border-[var(--accent)]">
             <div class="flex items-center gap-4">
                 <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold ${c.type === 'nsfw' ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'}">${c.type.toUpperCase().substring(0,1)}</div>
-                <div>
-                    <div class="font-semibold">${c.name}</div>
-                    <div class="text-xs text-[var(--text-muted)]">${s.med.filter(m=>m.cid===c.id).length} media</div>
-                </div>
+                <div><div class="font-semibold">${c.name}</div><div class="text-xs text-[var(--text-muted)]">${s.med.filter(m=>m.cid===c.id).length} media</div></div>
             </div>
-            <div class="opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+            <div class="opacity-0 group-hover:opacity-100 flex gap-2">
                 <button onclick="editCat('${c.id}')" class="btn btn-sec p-2 text-xs">Edit</button>
-                <button onclick="delCat('${c.id}')" class="btn btn-sec p-2 text-xs text-red-400 hover:text-white hover:bg-red-500/20">Hapus</button>
+                <button onclick="delCat('${c.id}')" class="btn btn-sec p-2 text-xs text-red-400">Hapus</button>
             </div>
         </div>
     `).join('');
@@ -346,28 +299,22 @@ function renderMedia() {
     let d = s.med;
     if(f) d = d.filter(i=>i.cid===f);
 
-    el.innerHTML = d.length === 0 ? '<div class="col-span-full card p-8 text-center text-[var(--text-muted)] text-sm">Media kosong.</div>' : d.map(m=>`
+    el.innerHTML = d.length === 0 ? '<div class="col-span-full card p-8 text-center text-[var(--text-muted)]">Media kosong.</div>' : d.map(m=>`
         <div class="media-card group" onclick="window.open('${m.url}')">
-            ${m.type === 'video' ? `<video src="${m.url}" muted></video><div class="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm"><svg class="w-10 h-10 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>` : `<img src="${m.url}" loading="lazy">`}
-            ${m.nsfw ? '<span class="absolute top-2 right-2 text-[10px] bg-red-500/80 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">NSFW</span>' : ''}
-            <div class="overlay">
-                <div>
-                    <p class="text-sm font-semibold text-white truncate">${m.title || 'Untitled'}</p>
-                    <p class="text-xs text-neutral-300">${s.cat.find(c=>c.id===m.cid)?.name || ''}</p>
-                </div>
-            </div>
-            <div class="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-all duration-300 flex gap-1">
-                 <button onclick="event.stopPropagation(); editMed('${m.id}')" class="bg-black/50 backdrop-blur-sm p-2 rounded-full text-white hover:bg-[var(--accent)] transition-colors"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                 <button onclick="event.stopPropagation(); delMed('${m.id}')" class="bg-black/50 backdrop-blur-sm p-2 rounded-full text-white hover:bg-red-500 transition-colors"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+            ${m.type === 'video' ? `<video src="${m.url}" muted></video><div class="absolute inset-0 flex items-center justify-center bg-black/30"><svg class="w-10 h-10 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>` : `<img src="${m.url}" loading="lazy">`}
+            ${m.nsfw ? '<span class="absolute top-2 right-2 text-[10px] bg-red-500/80 text-white px-2 py-0.5 rounded-full">NSFW</span>' : ''}
+            <div class="overlay"><div><p class="text-sm font-semibold text-white truncate">${m.title || 'Untitled'}</p><p class="text-xs text-neutral-300">${s.cat.find(c=>c.id===m.cid)?.name || ''}</p></div></div>
+            <div class="absolute top-2 left-2 opacity-0 group-hover:opacity-100 flex gap-1">
+                 <button onclick="event.stopPropagation(); editMed('${m.id}')" class="bg-black/50 p-2 rounded-full text-white hover:bg-[var(--accent)]"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                 <button onclick="event.stopPropagation(); delMed('${m.id}')" class="bg-black/50 p-2 rounded-full text-white hover:bg-red-500"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
             </div>
         </div>
     `).join('');
 }
 
-// Category Actions
+// CATEGORY ACTIONS
 function openCatModal(id=null) {
     editId = id;
-    document.getElementById('m-cat-title').innerText = id ? 'Edit Kategori' : 'Kategori Baru';
     document.getElementById('i-cat-n').value = id ? s.cat.find(i=>i.id===id).name : '';
     document.getElementById('i-cat-t').value = id ? s.cat.find(i=>i.id===id).type : 'normal';
     openModal('m-cat');
@@ -375,32 +322,22 @@ function openCatModal(id=null) {
 function saveCat() {
     const n = document.getElementById('i-cat-n').value.trim();
     const t = document.getElementById('i-cat-t').value;
-    if(!n) return toast('Nama wajib diisi', 'err');
+    if(!n) return toast('Nama wajib', 'err');
     if(editId) { let i = s.cat.findIndex(x=>x.id===editId); s.cat[i] = {...s.cat[i], name:n, type:t}; }
     else s.cat.push({id:'c'+Date.now(), name:n, type:t});
-    save(); render(); closeModal('m-cat'); toast('Kategori disimpan', 'ok');
+    save(); render(); closeModal('m-cat'); toast('Disimpan', 'ok');
 }
-function delCat(id) {
-    if(!confirm('Hapus kategori? Semua media ikut terhapus.')) return;
-    s.cat = s.cat.filter(i=>i.id!==id);
-    s.med = s.med.filter(i=>i.cid!==id);
-    save(); render(); toast('Kategori dihapus', 'ok');
-}
+function delCat(id) { if(!confirm('Hapus?')) return; s.cat = s.cat.filter(i=>i.id!==id); s.med = s.med.filter(i=>i.cid!==id); save(); render(); toast('Dihapus', 'ok'); }
 function editCat(id) { openCatModal(id); }
 
-// Media Actions
+// MEDIA ACTIONS
 function openMedModal(id=null) {
     if(s.cat.length===0) return toast('Buat kategori dulu!', 'err');
     editId = id;
-    tempFile = { type: '', data: '' }; // Reset temp file
-    
-    // Reset UI
-    document.getElementById('i-url-p').value = '';
-    document.getElementById('i-url-v').value = '';
-    document.getElementById('i-file-p').value = '';
-    document.getElementById('i-file-v').value = '';
-    document.getElementById('prev-p').classList.add('hidden');
-    document.getElementById('prev-v').classList.add('hidden');
+    tempFile = { type: '', data: '' };
+    document.getElementById('i-url-p').value = ''; document.getElementById('i-url-v').value = '';
+    document.getElementById('i-file-p').value = ''; document.getElementById('i-file-v').value = '';
+    document.getElementById('prev-p').classList.add('hidden'); document.getElementById('prev-v').classList.add('hidden');
 
     if(id) {
         let m = s.med.find(i=>i.id===id);
@@ -410,9 +347,7 @@ function openMedModal(id=null) {
         if(m.type === 'image') document.getElementById('i-url-p').value = m.url;
         else document.getElementById('i-url-v').value = m.url;
     } else {
-        document.getElementById('i-med-c').value = '';
-        document.getElementById('i-med-ti').value = '';
-        document.getElementById('i-med-ns').checked = false;
+        document.getElementById('i-med-c').value = ''; document.getElementById('i-med-ti').value = ''; document.getElementById('i-med-ns').checked = false;
     }
     openModal('m-med');
 }
@@ -420,24 +355,17 @@ function openMedModal(id=null) {
 function handleFile(e, type) {
     const file = e.target.files[0];
     if(!file) return;
-    
     const reader = new FileReader();
     reader.onload = function(ev) {
         tempFile = { type: type, data: ev.target.result };
-        
-        // UI Feedback
         const previewId = type === 'image' ? 'prev-p' : 'prev-v';
         const otherId = type === 'image' ? 'prev-v' : 'prev-p';
-        
-        document.getElementById(previewId).innerText = `File siap: ${file.name.substring(0,20)}...`;
+        document.getElementById(previewId).innerText = `File siap: ${file.name.substring(0,15)}...`;
         document.getElementById(previewId).classList.remove('hidden');
         document.getElementById(otherId).classList.add('hidden');
-        
-        // Clear opposite URL input to avoid confusion
         if(type === 'image') document.getElementById('i-url-v').value = '';
         else document.getElementById('i-url-p').value = '';
-        
-        toast('File berhasil dimuat', 'ok');
+        toast('File dimuat', 'ok');
     };
     reader.readAsDataURL(file);
 }
@@ -449,28 +377,19 @@ function saveMed() {
     const title = document.getElementById('i-med-ti').value.trim();
     const nsfw = document.getElementById('i-med-ns').checked;
 
-    // Validation Logic
-    if(!cid) return toast('Kategori wajib dipilih', 'err');
+    if(!cid) return toast('Kategori wajib', 'err');
     
-    let finalType = '';
-    let finalUrl = '';
-
-    // Priority 1: Uploaded File
+    let finalType = ''; let finalUrl = '';
     if(tempFile.data) {
-        finalType = tempFile.type;
-        finalUrl = tempFile.data;
-    } 
-    // Priority 2: URL Inputs
-    else if(url_p && url_v) {
-        return toast('Hanya isi salah satu: Link Foto ATAU Link Video', 'err');
+        finalType = tempFile.type; finalUrl = tempFile.data;
+    } else if(url_p && url_v) {
+        return toast('Hanya isi satu: Foto ATAU Video', 'err');
     } else if(url_p) {
-        finalType = 'image';
-        finalUrl = url_p;
+        finalType = 'image'; finalUrl = url_p;
     } else if(url_v) {
-        finalType = 'video';
-        finalUrl = url_v;
+        finalType = 'video'; finalUrl = url_v;
     } else {
-        return toast('Harap masukkan Link atau Upload File', 'err');
+        return toast('Link/File kosong', 'err');
     }
 
     const payload = { id: editId || 'm'+Date.now(), cid, type: finalType, url: finalUrl, title, nsfw };
@@ -480,57 +399,88 @@ function saveMed() {
 
     save(); render(); closeModal('m-med'); toast('Media disimpan', 'ok');
 }
-
-function delMed(id) { if(!confirm('Hapus media?')) return; s.med = s.med.filter(i=>i.id!==id); save(); render(); toast('Media dihapus', 'ok'); }
+function delMed(id) { if(!confirm('Hapus?')) return; s.med = s.med.filter(i=>i.id!==id); save(); render(); toast('Dihapus', 'ok'); }
 function editMed(id) { openMedModal(id); }
 
-// Telegram
+// TELEGRAM CORE (PATCHED)
 const tgLog = document.getElementById('tg-log');
+const proxy = 'https://corsproxy.io/?'; // Public CORS Proxy to bypass browser restrictions
+
 async function tgCheck() {
     const t = document.getElementById('tg-token').value;
     if(!t) return toast('Token kosong', 'err');
-    tgLog.classList.remove('hidden'); tgLog.innerText = 'Checking...';
+    tgLog.classList.remove('hidden'); tgLog.innerText = 'Checking via proxy...';
     try {
-        const r = await fetch(`https://api.telegram.org/bot${t}/getMe`);
+        const r = await fetch(proxy + encodeURIComponent(`https://api.telegram.org/bot${t}/getMe`));
         const d = await r.json();
         tgLog.innerText = JSON.stringify(d, null, 2);
         if(d.ok) toast('Bot Valid: ' + d.result.username, 'ok');
         else toast('Token Invalid', 'err');
-    } catch(e) { tgLog.innerText = 'Error: ' + e.message; }
+    } catch(e) { tgLog.innerText = 'Error: ' + e.message; toast('Koneksi Gagal', 'err'); }
 }
+
 async function tgTest() {
     const t = document.getElementById('tg-token').value;
     const c = document.getElementById('tg-cid').value;
     if(!t || !c) return toast('Token/ID kosong', 'err');
-    tgLog.classList.remove('hidden'); tgLog.innerText = 'Sending...';
+    tgLog.classList.remove('hidden'); tgLog.innerText = 'Sending via proxy...';
     try {
-        const r = await fetch(`https://api.telegram.org/bot${t}/sendMessage`, {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ chat_id: c, text: 'Success! Kayz AI Connected.' })
-        });
+        // Using proxy for sendMessage
+        const url = proxy + encodeURIComponent(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${c}&text=Kayz AI Connected`);
+        const r = await fetch(url);
         const d = await r.json();
         tgLog.innerText = JSON.stringify(d, null, 2);
         if(d.ok) toast('Pesan terkirim', 'ok');
-        else toast('Gagal kirim', 'err');
+        else toast('Error: ' + d.description, 'err');
     } catch(e) { tgLog.innerText = 'Error: ' + e.message; }
 }
-function tgSave() { s.bot.t = document.getElementById('tg-token').value; s.bot.c = document.getElementById('tg-cid').value; save(); toast('Config disimpan', 'ok'); }
+
 async function tgBackup() {
-    if(!s.bot.t || !s.bot.c) return toast('Config belum lengkap', 'err');
-    toast('Backing up...', 'ok');
+    if(!s.bot.t || !s.bot.c) return toast('Config belum disimpan', 'err');
+    
+    // Check size first
     const blob = new Blob([JSON.stringify(s, null, 2)], {type: 'application/json'});
+    const sizeMB = blob.size / (1024*1024);
+    
+    if (sizeMB > 49) {
+         toast(`Data terlalu besar (${sizeMB.toFixed(2)} MB). Maks 50MB.`, 'err');
+         return;
+    }
+
+    toast('Processing backup...', 'ok');
+    
     const fd = new FormData();
     fd.append('document', blob, 'kayz_backup.json');
     fd.append('chat_id', s.bot.c);
+    fd.append('caption', 'Kayz AI Backup Data');
+
     try {
-        const r = await fetch(`https://api.telegram.org/bot${s.bot.t}/sendDocument`, { method: 'POST', body: fd });
+        // Note: Sending FormData via CORS proxy can sometimes strip headers, 
+        // but most modern proxies like corsproxy.io handle it.
+        const r = await fetch(proxy + encodeURIComponent(`https://api.telegram.org/bot${s.bot.t}/sendDocument`), {
+            method: 'POST',
+            body: fd
+        });
         const d = await r.json();
-        if(d.ok) toast('Backup sukses', 'ok');
-        else toast('Backup gagal', 'err');
-    } catch(e) { toast('Error jaringan', 'err'); }
+        if(d.ok) toast('Backup sukses!', 'ok');
+        else {
+            toast('Backup gagal: ' + d.description, 'err');
+            console.error(d);
+        }
+    } catch(e) { 
+        toast('Error jaringan/proxy', 'err'); 
+        console.error(e);
+    }
 }
 
-// Settings
+function tgSave() { 
+    s.bot.t = document.getElementById('tg-token').value; 
+    s.bot.c = document.getElementById('tg-cid').value; 
+    save(); 
+    toast('Config disimpan', 'ok'); 
+}
+
+// SETTINGS
 function loadCfg() {
     document.getElementById('tg-token').value = s.bot.t;
     document.getElementById('tg-cid').value = s.bot.c;
@@ -555,10 +505,9 @@ function impJSON(e) {
     reader.readAsText(file);
 }
 
-// === GOD-TIER GALLERY EXPORT ===
+// EXPORT GALLERY (GOD-TIER)
 function exportGallery() {
     if(s.med.length === 0) return toast('Media kosong!', 'err');
-    
     const html = `
 <!DOCTYPE html>
 <html lang="id">
@@ -567,138 +516,50 @@ function exportGallery() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${s.cfg.title}</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: ${s.cfg.accent}; --bg: ${s.cfg.bg}; --glass: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.05); }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', system-ui; overflow-x: hidden; }
-        h1, h2, h3, button { font-family: 'Space Grotesk', sans-serif; }
-        body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-        @media (max-width: 640px) { .grid { gap: 12px; } }
-        .item { 
-            position: relative; border-radius: 20px; overflow: hidden; cursor: pointer;
-            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2));
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
-            aspect-ratio: 4/5; border: 1px solid var(--border);
-        }
-        .item:hover { 
-            transform: translateY(-8px) scale(1.01); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-        .item img, .item video { width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease; }
-        .item:hover img, .item:hover video { transform: scale(1.05); }
-        .meta {
-            position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        :root { --accent: ${s.cfg.accent}; --bg: ${s.cfg.bg}; }
+        body { background: var(--bg); color: #fff; font-family: 'Space Grotesk', system-ui; }
+        body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .item { position: relative; border-radius: 20px; overflow: hidden; cursor: pointer; background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2)); box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.3s; aspect-ratio: 4/5; border: 1px solid rgba(255,255,255,0.05); }
+        .item:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .item img, .item video { width: 100%; height: 100%; object-fit: cover; }
+        .meta { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 20px; }
         .item:hover .meta { opacity: 1; }
-        .meta-content { 
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px;
-            transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .item:hover .meta-content { transform: translateY(0); }
-        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(30px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .lightbox.active { opacity: 1; visibility: visible; }
-        .l-content { position: relative; max-width: 90vw; max-height: 90vh; animation: zoomIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .l-img { max-width: 100%; max-height: 85vh; border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .l-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; color: white; }
-        .l-nav:hover { background: var(--accent); transform: translateY(-50%) scale(1.1); }
-        .l-prev { left: -70px; } .l-next { right: -70px; }
-        @media (max-width: 768px) { .l-nav { top: auto; bottom: -60px; } .l-prev { left: 10px; } .l-next { right: 10px; } }
-        .blur-nsfw { filter: blur(20px); }
+        .blur-nsfw { filter: blur(15px); }
+        .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .lightbox.active { display: flex; }
+        .l-img { max-width: 90vw; max-height: 90vh; border-radius: 16px; }
     </style>
 </head>
-<body class="antialiased">
-    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.6; background: radial-gradient(circle at 50% 0%, ${s.cfg.accent}20, transparent 60%);"></div>
-    <header class="sticky top-0 z-50 backdrop-blur-xl bg-[var(--bg)]/60 border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--accent)] to-orange-300 flex items-center justify-center shadow-lg shadow-orange-500/20">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>
-                </div>
-                <h1 class="text-xl font-bold tracking-tight">${s.cfg.title}</h1>
-            </div>
-            <input type="text" id="search" onkeyup="search()" class="bg-white/5 border border-white/10 rounded-full px-5 py-2 text-sm outline-none focus:border-[var(--accent)] transition-colors w-40 md:w-64" placeholder="Search...">
+<body class="p-6 md:p-10">
+    <h1 class="text-3xl font-bold text-center mb-10">${s.cfg.title}</h1>
+    <div class="grid max-w-6xl mx-auto" id="grid">
+        ${s.med.map(m => `
+        <div class="item ${m.nsfw && !s.cfg.nsfw ? 'blur-nsfw' : ''}" onclick="openL('${m.url}', '${m.type}')">
+            ${m.type === 'video' ? `<video src="${m.url}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>` : `<img src="${m.url}" loading="lazy">`}
+            <div class="meta"><div><p class="font-bold text-white">${m.title || ''}</p><p class="text-xs text-white/60">${s.cat.find(c=>c.id===m.cid)?.name || ''}</p></div></div>
         </div>
-    </header>
-    <main class="relative z-10 max-w-7xl mx-auto px-6 py-10">
-        <div class="grid" id="grid">
-            ${s.med.map(m => `
-            <div class="item ${m.nsfw && !s.cfg.nsfw ? 'blur-nsfw' : ''}" data-title="${m.title}" onclick="openL(${s.med.indexOf(m)})">
-                ${m.type === 'video' 
-                    ? `<video src="${m.url}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
-                    : `<img src="${m.url}" loading="lazy">`
-                }
-                <div class="meta">
-                    <div class="meta-content">
-                        <p class="font-bold text-white truncate">${m.title || 'Untitled'}</p>
-                        <p class="text-xs text-white/60 mt-1">${s.cat.find(c=>c.id===m.cid)?.name || ''}</p>
-                    </div>
-                </div>
-            </div>
-            `).join('')}
-        </div>
-    </main>
-    <div class="lightbox" id="l" onclick="if(event.target === this) closeL()">
-        <div class="l-content">
-            <img id="l-img" class="l-img" src="">
-            <video id="l-vid" class="l-img hidden" controls></video>
-        </div>
-        <div class="l-nav l-prev" onclick="event.stopPropagation(); change(-1)"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></div>
-        <div class="l-nav l-next" onclick="event.stopPropagation(); change(1)"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
-        <div style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.6); padding:8px 20px; border-radius:100px; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1);">
-            <h3 id="l-title" class="font-bold text-sm text-center"></h3>
-        </div>
+        `).join('')}
+    </div>
+    <div class="lightbox" id="l" onclick="this.classList.remove('active')">
+        <img id="li" class="l-img hidden">
+        <video id="lv" class="l-img hidden" controls></video>
     </div>
     <script>
-        const data = ${JSON.stringify(s.med)};
-        let idx = 0;
-        function openL(i) {
-            idx = i;
-            const item = data[i];
-            const img = document.getElementById('l-img');
-            const vid = document.getElementById('l-vid');
-            if(item.type === 'video') {
-                img.classList.add('hidden'); vid.classList.remove('hidden');
-                vid.src = item.url; vid.play();
-            } else {
-                vid.classList.add('hidden'); img.classList.remove('hidden');
-                img.src = item.url;
-            }
-            document.getElementById('l-title').innerText = item.title || 'Untitled';
-            document.getElementById('l').classList.add('active');
+        function openL(u, t) {
+            const l = document.getElementById('l');
+            const li = document.getElementById('li');
+            const lv = document.getElementById('lv');
+            if(t === 'video') { li.classList.add('hidden'); lv.classList.remove('hidden'); lv.src = u; }
+            else { lv.classList.add('hidden'); li.classList.remove('hidden'); li.src = u; }
+            l.classList.add('active');
         }
-        function closeL() {
-            document.getElementById('l').classList.remove('active');
-            document.getElementById('l-vid').pause();
-        }
-        function change(dir) {
-            idx += dir;
-            if(idx >= data.length) idx = 0;
-            if(idx < 0) idx = data.length - 1;
-            openL(idx);
-        }
-        function search() {
-            const q = document.getElementById('search').value.toLowerCase();
-            document.querySelectorAll('.item').forEach(el => {
-                el.style.display = el.dataset.title.toLowerCase().includes(q) ? 'block' : 'none';
-            });
-        }
-        document.addEventListener('keydown', e => {
-            if(!document.getElementById('l').classList.contains('active')) return;
-            if(e.key === 'Escape') closeL();
-            if(e.key === 'ArrowRight') change(1);
-            if(e.key === 'ArrowLeft') change(-1);
-        });
     <\/script>
-    <footer class="text-center py-12 text-neutral-600 text-xs">Powered by <span class="font-bold text-neutral-400">Kayz AI</span></footer>
+    <footer class="text-center mt-10 text-neutral-500 text-xs">Powered by Kayz AI</footer>
 </body>
 </html>`;
-
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([html]));
     a.download = 'gallery_kayz_ai.html';
@@ -706,7 +567,7 @@ function exportGallery() {
     toast('Gallery exported!', 'ok');
 }
 
-// Utils
+// UTILS
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 function toast(msg, type='ok') {
