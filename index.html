@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayz Gallery - Sign In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ========================================
+           MATERIAL DESIGN 3 TOKENS
+        ======================================== */
+        :root {
+            /* Primary Colors (Orange Base) */
+            --md-primary: #FF774C;
+            --md-on-primary: #FFFFFF;
+            --md-primary-container: #FFD9C7;
+            --md-on-primary-container: #311300;
+            
+            /* Secondary Colors */
+            --md-secondary: #FFB89A;
+            --md-on-secondary: #000000;
+            
+            /* Tertiary Colors */
+            --md-tertiary: #FFB59E;
+            
+            /* Error Colors */
+            --md-error: #FFB4AB;
+            --md-on-error: #690005;
+            --md-error-container: #93000A;
+            
+            /* Neutral Colors (Dark Theme Base) */
+            --md-background: #121212;
+            --md-on-background: #E6E1E5;
+            --md-surface: #181818;
+            --md-on-surface: #E6E1E5;
+            --md-surface-variant: #49454F;
+            --md-on-surface-variant: #CAC4D0;
+            --md-outline: #938F99;
+            --md-outline-variant: #49454F;
+            
+            /* Elevation Tints (Lighter = Higher in Dark Mode) */
+            --md-surface-container: #1E1E1E;
+            --md-surface-container-low: #1B1B1B;
+            --md-surface-container-high: #242424;
+            --md-surface-container-highest: #2B2B2B;
+            
+            /* Shape Tokens */
+            --md-shape-corner-small: 8px;
+            --md-shape-corner-medium: 12px;
+            --md-shape-corner-large: 16px;
+            --md-shape-corner-extra-large: 28px;
+            --md-shape-corner-full: 9999px;
+            
+            /* Motion */
+            --md-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+            --md-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+            --md-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+            --md-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+            --md-motion-duration-short4: 200ms;
+            --md-motion-duration-medium4: 300ms;
+            --md-motion-duration-long4: 400ms;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--md-background);
+            color: var(--md-on-background);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-display {
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        /* ========================================
+           SURFACE CONTAINER (CARD)
+        ======================================== */
+        .md-surface-container {
+            background: var(--md-surface-container-low);
+            border-radius: var(--md-shape-corner-extra-large);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .md-surface {
+            padding: 48px 32px 40px;
+        }
+
+        /* ========================================
+           HEADER SECTION
+        ======================================== */
+        .md-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .md-icon-container {
+            width: 80px;
+            height: 80px;
+            background: var(--md-primary);
+            border-radius: var(--md-shape-corner-large);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: transform var(--md-motion-duration-medium4) var(--md-motion-easing-emphasized);
+        }
+
+        .md-icon-container:hover {
+            transform: scale(1.05);
+        }
+
+        .md-icon-container .material-icons-round {
+            font-size: 40px;
+            color: var(--md-on-primary);
+        }
+
+        .md-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--md-on-background);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .md-subtitle {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            text-align: center;
+        }
+
+        /* ========================================
+           TEXT FIELD (MATERIAL 3 STYLE)
+        ======================================== */
+        .md-text-field {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        .md-input-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .md-input {
+            width: 100%;
+            height: 56px;
+            padding: 16px;
+            padding-top: 24px;
+            padding-right: 52px;
+            background: transparent;
+            border: none;
+            border-radius: var(--md-shape-corner-extra-large) var(--md-shape-corner-extra-large) 0 0;
+            border-bottom: 2px solid var(--md-outline-variant);
+            font-family: inherit;
+            font-size: 16px;
+            color: var(--md-on-surface);
+            transition: all var(--md-motion-duration-short4) var(--md-motion-easing-standard);
+            caret-color: var(--md-primary);
+        }
+
+        .md-input:hover {
+            background: rgba(230, 225, 229, 0.04);
+        }
+
+        .md-input:focus {
+            outline: none;
+            background: rgba(230, 225, 229, 0.08);
+            border-bottom-color: var(--md-primary);
+        }
+
+        .md-input:focus + .md-label,
+        .md-input:not(:placeholder-shown) + .md-label {
+            top: 8px;
+            font-size: 12px;
+            color: var(--md-primary);
+        }
+
+        .md-input:not(:focus):not(:placeholder-shown) + .md-label {
+            color: var(--md-on-surface-variant);
+        }
+
+        .md-label {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            font-size: 16px;
+            color: var(--md-on-surface-variant);
+            pointer-events: none;
+            transition: all var(--md-motion-duration-short4) var(--md-motion-easing-standard);
+            transform-origin: left center;
+        }
+
+        .md-input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: var(--md-shape-corner-full);
+            transition: background var(--md-motion-duration-short4) var(--md-motion-easing-standard);
+        }
+
+        .md-input-icon:hover {
+            background: rgba(230, 225, 229, 0.08);
+        }
+
+        .md-input-icon .material-icons-round {
+            font-size: 24px;
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Error State */
+        .md-text-field.error .md-input {
+            border-bottom-color: var(--md-error);
+        }
+
+        .md-text-field.error .md-label {
+            color: var(--md-error);
+        }
+
+        .md-supporting-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+            padding-left: 16px;
+            font-size: 12px;
+            color: var(--md-error);
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all var(--md-motion-duration-short4) var(--md-motion-easing-standard);
+        }
+
+        .md-text-field.error .md-supporting-text {
+            opacity: 1;
+            height: 20px;
+        }
+
+        .md-supporting-text .material-icons-round {
+            font-size: 16px;
+        }
+
+        /* ========================================
+           FILLED BUTTON
+        ======================================== */
+        .md-filled-button {
+            position: relative;
+            width: 100%;
+            height: 56px;
+            background: var(--md-primary);
+            border: none;
+            border-radius: var(--md-shape-corner-full);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+            color: var(--md-on-primary);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all var(--md-motion-duration-short4) var(--md-motion-easing-standard);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+        }
+
+        .md-filled-button:hover {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+            background: #E65F35; /* Slightly darker/lighter state layer */
+        }
+
+        .md-filled-button:active {
+            transform: scale(0.98);
+        }
+
+        .md-filled-button:disabled {
+            background: rgba(255, 119, 76, 0.38);
+            color: rgba(255, 255, 255, 0.38);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .md-button-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .md-button-icon {
+            font-size: 18px;
+        }
+
+        /* Ripple Effect */
+        .md-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(0);
+            animation: md-ripple-animation 600ms linear;
+            pointer-events: none;
+        }
+
+        @keyframes md-ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        .md-footer {
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .md-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+        }
+
+        .md-footer-item .material-icons-round {
+            font-size: 16px;
+            color: var(--md-primary);
+        }
+
+        /* ========================================
+           VERIFICATION OVERLAY (MATERIAL)
+        ======================================== */
+        .verification-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--md-background);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 24px;
+        }
+
+        .verification-overlay.active {
+            display: flex;
+            animation: fadeIn var(--md-motion-duration-medium4) var(--md-motion-easing-emphasized);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .verification-card {
+            background: var(--md-surface-container-low);
+            border-radius: var(--md-shape-corner-extra-large);
+            padding: 48px 40px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp var(--md-motion-duration-long4) var(--md-motion-easing-emphasized-decelerate);
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Material Circular Progress */
+        .md-progress-container {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .md-circular-progress {
+            width: 100%;
+            height: 100%;
+            animation: rotate 2s linear infinite;
+        }
+
+        .md-circular-progress circle {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .md-progress-track {
+            stroke: var(--md-surface-variant);
+        }
+
+        .md-progress-active {
+            stroke: var(--md-primary);
+            stroke-dasharray: 200;
+            stroke-dashoffset: 160;
+            animation: dash 1.5s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes dash {
+            0% {
+                stroke-dashoffset: 200;
+                transform: rotate(0);
+            }
+            50% {
+                stroke-dashoffset: 50;
+            }
+            100% {
+                stroke-dashoffset: 200;
+                transform: rotate(360deg);
+            }
+        }
+
+        .md-progress-container .material-icons-round {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            color: var(--md-primary);
+        }
+
+        .md-verification-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--md-on-background);
+            margin-bottom: 8px;
+        }
+
+        .md-verification-subtitle {
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            margin-bottom: 40px;
+        }
+
+        /* Linear Progress Indicator */
+        .md-linear-progress {
+            height: 4px;
+            background: var(--md-surface-variant);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .md-linear-progress-bar {
+            height: 100%;
+            background: var(--md-primary);
+            width: 0%;
+            transition: width var(--md-motion-duration-medium4) var(--md-motion-easing-emphasized);
+        }
+
+        /* Step Indicators */
+        .md-steps-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .md-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .md-step-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--md-surface-container-highest);
+            border: 2px solid var(--md-outline-variant);
+            border-radius: var(--md-shape-corner-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-on-surface-variant);
+            transition: all var(--md-motion-duration-medium4) var(--md-motion-easing-emphasized);
+        }
+
+        .md-step.active .md-step-icon {
+            background: var(--md-primary-container);
+            border-color: var(--md-primary);
+            color: var(--md-on-primary-container);
+        }
+
+        .md-step.completed .md-step-icon {
+            background: var(--md-primary);
+            border-color: var(--md-primary);
+            color: var(--md-on-primary);
+        }
+
+        .md-step.completed .md-step-icon .material-icons-round {
+            font-size: 20px;
+        }
+
+        .md-step-label {
+            font-size: 12px;
+            color: var(--md-on-surface-variant);
+            font-weight: 500;
+        }
+
+        .md-step.active .md-step-label {
+            color: var(--md-primary);
+        }
+
+        .md-step.completed .md-step-label {
+            color: var(--md-on-surface);
+        }
+
+        /* Success State */
+        .md-success-icon {
+            width: 96px;
+            height: 96px;
+            background: var(--md-primary-container);
+            border-radius: var(--md-shape-corner-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            animation: scaleIn var(--md-motion-duration-long4) var(--md-motion-easing-emphasized-decelerate);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .md-success-icon .material-icons-round {
+            font-size: 48px;
+            color: var(--md-primary);
+        }
+
+        .md-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--md-surface-container-highest);
+            border-radius: var(--md-shape-corner-small);
+            font-size: 14px;
+            color: var(--md-on-surface-variant);
+            margin-top: 16px;
+        }
+
+        .md-chip strong {
+            color: var(--md-primary);
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 480px) {
+            .md-surface {
+                padding: 40px 24px 32px;
+            }
+            
+            .md-title {
+                font-size: 22px;
+            }
+            
+            .md-footer {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .verification-card {
+                padding: 40px 24px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Login Surface -->
+    <div class="md-surface-container" id="loginContainer">
+        <div class="md-surface">
+            <!-- Header -->
+            <div class="md-header">
+                <div class="md-icon-container">
+                    <span class="material-icons-round">photo_library</span>
+                </div>
+                <h1 class="md-title">Welcome to Kayz Gallery</h1>
+                <p class="md-subtitle">Enter your password to access the dashboard</p>
+            </div>
+
+            <!-- Form -->
+            <form id="loginForm" autocomplete="off">
+                <!-- Text Field -->
+                <div class="md-text-field" id="textField">
+                    <div class="md-input-container">
+                        <input 
+                            type="password" 
+                            class="md-input" 
+                            id="passwordInput"
+                            placeholder=" "
+                            autocomplete="off"
+                            autofocus
+                        >
+                        <label class="md-label">Password</label>
+                        <div class="md-input-icon" id="togglePassword" role="button" aria-label="Toggle password visibility">
+                            <span class="material-icons-round" id="visibilityIcon">visibility</span>
+                        </div>
+                    </div>
+                    <div class="md-supporting-text">
+                        <span class="material-icons-round">error</span>
+                        <span>Incorrect password. Please try again.</span>
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <button type="submit" class="md-filled-button" id="submitBtn">
+                    <span class="md-button-content">
+                        <span class="material-icons-round md-button-icon">arrow_forward</span>
+                        <span>Sign In</span>
+                    </span>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="md-footer">
+                <div class="md-footer-item">
+                    <span class="material-icons-round">lock</span>
+                    <span>Secured</span>
+                </div>
+                <div class="md-footer-item">
+                    <span class="material-icons-round">verified_user</span>
+                    <span>Encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Overlay -->
+    <div class="verification-overlay" id="verificationOverlay">
+        <div class="verification-card">
+            <!-- Loading State -->
+            <div id="loadingState">
+                <div class="md-progress-container">
+                    <svg class="md-circular-progress" viewBox="0 0 72 72">
+                        <circle class="md-progress-track" cx="36" cy="36" r="32"/>
+                        <circle class="md-progress-active" cx="36" cy="36" r="32"/>
+                    </svg>
+                    <span class="material-icons-round">shield</span>
+                </div>
+
+                <h2 class="md-verification-title">Verifying identity</h2>
+                <p class="md-verification-subtitle">Please wait while we verify your credentials</p>
+
+                <div class="md-linear-progress">
+                    <div class="md-linear-progress-bar" id="progressBar"></div>
+                </div>
+
+                <div class="md-steps-container">
+                    <div class="md-step" id="step1">
+                        <div class="md-step-icon">1</div>
+                        <span class="md-step-label">Identity</span>
+                    </div>
+                    <div class="md-step" id="step2">
+                        <div class="md-step-icon">2</div>
+                        <span class="md-step-label">Security</span>
+                    </div>
+                    <div class="md-step" id="step3">
+                        <div class="md-step-icon">3</div>
+                        <span class="md-step-label">Access</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success State -->
+            <div id="successState" class="hidden">
+                <div class="md-success-icon">
+                    <span class="material-icons-round">check</span>
+                </div>
+                <h2 class="md-verification-title">Access granted</h2>
+                <p class="md-verification-subtitle">Redirecting you to the dashboard</p>
+                <div class="md-chip">
+                    <span class="material-icons-round" style="font-size: 16px;">schedule</span>
+                    <span>Redirecting in <strong id="countdown">3</strong>s</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // DOM ELEMENTS
+        // ========================================
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const textField = document.getElementById('textField');
+        const togglePassword = document.getElementById('togglePassword');
+        const visibilityIcon = document.getElementById('visibilityIcon');
+        const submitBtn = document.getElementById('submitBtn');
+        const loginContainer = document.getElementById('loginContainer');
+        const verificationOverlay = document.getElementById('verificationOverlay');
+        const loadingState = document.getElementById('loadingState');
+        const successState = document.getElementById('successState');
+        const progressBar = document.getElementById('progressBar');
+        const countdownEl = document.getElementById('countdown');
+
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+
+        const CORRECT_PASSWORD = 'sevenislucky';
+        let isPasswordVisible = false;
+
+        // ========================================
+        // RIPPLE EFFECT (Material 3)
+        // ========================================
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const rect = button.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            
+            const diameter = Math.max(rect.width, rect.height);
+            const radius = diameter / 2;
+
+            ripple.style.width = ripple.style.height = `${diameter}px`;
+            ripple.style.left = `${event.clientX - rect.left - radius}px`;
+            ripple.style.top = `${event.clientY - rect.top - radius}px`;
+            ripple.className = 'md-ripple';
+
+            // Remove existing ripples
+            const existingRipple = button.querySelector('.md-ripple');
+            if (existingRipple) {
+                existingRipple.remove();
+            }
+
+            button.appendChild(ripple);
+
+            // Clean up after animation
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        submitBtn.addEventListener('click', createRipple);
+
+        // ========================================
+        // TOGGLE PASSWORD VISIBILITY
+        // ========================================
+        togglePassword.addEventListener('click', () => {
+            isPasswordVisible = !isPasswordVisible;
+            passwordInput.type = isPasswordVisible ? 'text' : 'password';
+            visibilityIcon.textContent = isPasswordVisible ? 'visibility_off' : 'visibility';
+        });
+
+        // ========================================
+        // FORM SUBMISSION
+        // ========================================
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            createRipple(e);
+
+            const password = passwordInput.value.trim();
+
+            if (!password) {
+                textField.classList.add('error');
+                passwordInput.focus();
+                return;
+            }
+
+            if (password !== CORRECT_PASSWORD) {
+                textField.classList.add('error');
+                passwordInput.value = '';
+                passwordInput.focus();
+                return;
+            }
+
+            // Success
+            textField.classList.remove('error');
+            showVerification();
+        });
+
+        // Clear error on input
+        passwordInput.addEventListener('input', () => {
+            textField.classList.remove('error');
+        });
+
+        // ========================================
+        // VERIFICATION FLOW
+        // ========================================
+        function showVerification() {
+            loginContainer.style.opacity = '0';
+            loginContainer.style.transform = 'scale(0.95)';
+            loginContainer.style.transition = `all 300ms var(--md-motion-easing-emphasized-accelerate)`;
+
+            setTimeout(() => {
+                loginContainer.style.display = 'none';
+                verificationOverlay.classList.add('active');
+                runVerificationSequence();
+            }, 300);
+        }
+
+        async function runVerificationSequence() {
+            // Stage 1
+            step1.classList.add('active');
+            await animateProgress(0, 35, 1200);
+            step1.classList.remove('active');
+            step1.classList.add('completed');
+            step1.querySelector('.md-step-icon').innerHTML = '<span class="material-icons-round">check</span>';
+
+            // Stage 2
+            step2.classList.add('active');
+            await animateProgress(35, 70, 1500);
+            step2.classList.remove('active');
+            step2.classList.add('completed');
+            step2.querySelector('.md-step-icon').innerHTML = '<span class="material-icons-round">check</span>';
+
+            // Stage 3
+            step3.classList.add('active');
+            await animateProgress(70, 100, 1000);
+            step3.classList.remove('active');
+            step3.classList.add('completed');
+            step3.querySelector('.md-step-icon').innerHTML = '<span class="material-icons-round">check</span>';
+
+            // Show success
+            setTimeout(() => {
+                loadingState.classList.add('hidden');
+                successState.classList.remove('hidden');
+                startCountdown();
+            }, 600);
+        }
+
+        function animateProgress(from, to, duration) {
+            return new Promise((resolve) => {
+                const startTime = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // Emphasized easing
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = from + (to - from) * eased;
+
+                    progressBar.style.width = current + '%';
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        resolve();
+                    }
+                }
+
+                requestAnimationFrame(update);
+            });
+        }
+
+        function startCountdown() {
+            let count = 3;
+            const interval = setInterval(() => {
+                count--;
+                countdownEl.textContent = count;
+
+                if (count <= 0) {
+                    clearInterval(interval);
+                    window.location.href = 'kayz.html';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
